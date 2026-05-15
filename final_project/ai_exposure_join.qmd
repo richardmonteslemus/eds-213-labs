@@ -1,0 +1,166 @@
+---
+title: "AI Exposure Join"
+subtitle: "Matching job postings to SOC codes and AI exposure scores"
+author: "Richie"
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    theme: flatly
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+library(tidyverse)
+```
+
+## Step 1: Load the crosswalk
+
+This crosswalk maps keyword patterns and job titles to standardized SOC codes.
+
+```{r}
+#| label: load-crosswalk
+crosswalk <- read_csv("job_soc_crosswalk.csv")
+glimpse(crosswalk)
+```
+
+## Step 2: Load AI exposure data
+
+Download from [Anthropic's HuggingFace repo](https://huggingface.co/datasets/Anthropic/EconomicIndex)
+under the **"Labor market impacts"** folder. Rename the file to match below.
+
+```{r}
+#| label: load-exposure
+# Option A: Anthropic labor market impacts (observed exposure scores by SOC)
+anthropic_exposure <- read_csv("occupation_exposure.csv")  # rename to match actual file
+
+# Option B: Eloundou et al. task-level beta scores (release_2025_02_10/ folder)
+# eloundou_tasks <- read_csv("task_exposure_eloundou.csv")
+
+glimpse(anthropic_exposure)
+```
+
+## Step 3: Load your job postings
+
+Assumes a column called `job_title` exists in your data.
+
+```{r}
+#| label: load-jobs
+your_jobs <- read_csv("your_job_postings.csv")  # replace with your file
+
+glimpse(your_jobs)
+```
+
+## Step 4: Assign SOC codes via keyword matching
+
+Multi-word specific patterns are matched first (e.g., `"data scientist"`), then
+single-keyword fallbacks (e.g., `"data"`).
+
+```{r}
+#| label: assign-soc
+crosswalk_primary <- crosswalk %>%
+  filter(match_confidence %in% c("High", "Medium")) %>%
+  arrange(soc_code, match_confidence) %>%
+  group_by(keyword_pattern) %>%
+  slice(1) %>%
+  ungroup()
+
+assign_soc <- function(title) {
+  title_lower <- str_to_lower(title)
+
+  # Try multi-word (specific) patterns first
+  specific_patterns <- crosswalk_primary %>%
+    filter(str_detect(keyword_pattern, "\\s"))
+
+  for (i in seq_len(nrow(specific_patterns))) {
+    if (str_detect(title_lower, specific_patterns$regex_example[i])) {
+      return(specific_patterns$soc_code[i])
+    }
+  }
+
+  # Fall back to single-keyword patterns
+  keyword_patterns <- crosswalk_primary %>%
+    filter(!str_detect(keyword_pattern, "\\s"))
+
+  for (i in seq_len(nrow(keyword_patterns))) {
+    if (str_detect(title_lower, keyword_patterns$regex_example[i])) {
+      return(keyword_patterns$soc_code[i])
+    }
+  }
+
+  return(NA_character_)
+}
+
+your_jobs <- your_jobs %>%
+  mutate(soc_code = map_chr(job_title, assign_soc))
+```
+
+## Step 5: Join to AI exposure scores
+
+```{r}
+#| label: join-exposure
+jobs_with_exposure <- your_jobs %>%
+  left_join(anthropic_exposure, by = "soc_code")
+```
+
+### Coverage check
+
+How many of your job postings successfully matched to an exposure score?
+
+```{r}
+#| label: coverage
+jobs_with_exposure %>%
+  summarise(
+    total_jobs       = n(),
+    matched_soc      = sum(!is.na(soc_code)),
+    matched_exposure = sum(!is.na(observed_exposure)),  # update col name to match actual file
+    pct_matched      = round(matched_exposure / total_jobs, 3)
+  )
+```
+
+## Step 6: (Optional) All matching SOC codes per job title
+
+Useful if you want to flag that a job could reasonably map to multiple occupations.
+
+```{r}
+#| label: multi-soc
+jobs_multi_soc <- your_jobs %>%
+  select(job_title) %>%
+  distinct() %>%
+  mutate(
+    matched_socs = map(job_title, function(title) {
+      title_lower <- str_to_lower(title)
+      crosswalk %>%
+        filter(map_lgl(regex_example, ~ str_detect(title_lower, .x))) %>%
+        select(soc_code, soc_title, match_confidence)
+    })
+  ) %>%
+  unnest(matched_socs)
+
+jobs_multi_soc
+```
+
+## Step 7: Summary table — mean exposure by SOC code
+
+```{r}
+#| label: summary
+exposure_summary <- jobs_with_exposure %>%
+  group_by(soc_code) %>%
+  summarise(
+    n_jobs        = n(),
+    mean_exposure = mean(observed_exposure, na.rm = TRUE),  # update col name
+    .groups = "drop"
+  ) %>%
+  left_join(
+    crosswalk %>% select(soc_code, soc_title) %>% distinct(),
+    by = "soc_code"
+  ) %>%
+  arrange(desc(mean_exposure))
+
+exposure_summary
+```

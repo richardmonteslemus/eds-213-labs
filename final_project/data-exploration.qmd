@@ -1,0 +1,129 @@
+---
+title: "data-exploration"
+author: "Richard Montes Lemus"
+format: html
+---
+
+```{r}
+#| warning: false
+library(here)
+library(tidyverse)
+library(janitor)
+library(stringr)
+library(dplyr)
+```
+
+```{r}
+#| message: false
+# Read in MEDS jobs postings
+meds_jobs_fall <- read_csv(here("/Users/richardmonteslemus/Documents/MEDS/EDS-213final_project", "data", "Job-Posts-Copy-Fall.csv")) %>% 
+  clean_names()
+meds_jobs_winter <- read_csv(here("final_project", "data", "Job-Posts-Copy-Winter.csv")) %>% 
+  clean_names()
+
+ai_job_risk <- read_csv(here("final_project", "data", "My_Data.csv")) %>% 
+  clean_names() %>% 
+  rename(job_titles = job_titiles)
+
+```
+
+```{r}
+#| warning: false
+# Coerce min salary column to numeric
+meds_jobs_winter$yearly_salary_min <- as.numeric(str_trim(meds_jobs_winter$yearly_salary_min))
+
+# Coerce max salary column to numeric
+meds_jobs_winter$yearly_salary_max <- as.numeric(str_trim(meds_jobs_winter$yearly_salary_max))
+
+```
+
+```{r}
+# Concatinate dataframes
+meds_jobs_combined <- bind_rows(meds_jobs_fall, meds_jobs_winter) 
+```
+
+```{r}
+position_type <- unique(meds_jobs_combined$position_type)
+position_type
+```
+
+```{r}
+# Keep whole position titles as the pattern instead of individual words
+keywords <- meds_jobs_combined$position_type %>%
+  str_to_lower() %>%
+  unique() %>%
+  na.omit()
+
+# Remove overly broad entries
+remove_these <- c("researcher", "reseacher", "specialist")
+keywords <- keywords[!keywords %in% remove_these]
+
+# Add standalone keywords
+extra_keywords <- c("gis", "data", "climate", "water resource", "water", "conservation", "environmental", "sustainability", "machine learning", "database", "spatial", "geospatial", "researcher", "energy", "code")
+
+# Combine and build pattern
+pattern <- c(paste0("\\b", keywords, "\\b"), paste0("\\b", extra_keywords, "\\b")) %>%
+  paste(collapse = "|")
+
+ai_job_risk_filtered <- ai_job_risk %>%
+  filter(str_detect(str_to_lower(job_titles), pattern)) 
+
+```
+
+
+```{r}
+ai_job_risk_filtered
+```
+
+```{r}
+ai_job_risk_cleaned <- ai_job_risk_filtered %>%
+    filter(!job_titles %in% c("Game Programmer", "Clinical Data Analyst","Healthcare Data Analyst", "Oracle Database Developer", "Java Programmer", "Financial Data Analyst", "Sas Programmer", "Enterprise Data Architect", "Oracle Database Administrator", "Marketing Data Analyst", "Code Enforcement Officer", "Water Operator", "Rpg Programmer", "Mainframe Programmer", "Health Data Analyst", "Business Data Analyst", "Clinical Data Manager", "Market Researcher", "Clinical Data Coordinator", "Environmental Chemist", "Cmm Programmer", "Cnc Programmer", "Data Center Technician", "Environmental Attorney", "Water Treatment Plant Operator", "User Experience Researcher", "Clinical Data Associate", "Environmental Educator", "Environmental Educator"))
+```
+
+```{r}
+job_soc_crosswalk <- read_csv(here("final_project", "data", "job_soc_crosswalk.csv")) %>% 
+  clean_names()
+job_soc_crosswalk
+```
+
+```{r}
+job_exposure_filtered
+```
+
+```{r}
+task_exposure <- read_csv(here("final_project", "data", "task_penetration.csv")) %>% 
+  clean_names()
+task_exposure
+```
+
+```{r}
+task_exposure_filtered <- task_exposure %>%
+  filter(str_detect(str_to_lower(task), pattern)) 
+```
+
+## Use Job Title Column for Keywords
+```{r}
+job_title <- unique(meds_jobs_combined$job_title)
+job_title
+```
+
+```{r}
+# Keep whole position titles as the pattern instead of individual words
+keywords_job_title <- meds_jobs_combined$job_title %>%
+  str_to_lower() %>%
+  unique() %>%
+  na.omit()
+
+# Combine and build pattern
+pattern_job_title <- paste0("\\b", keywords_job_title, "\\b") %>%
+  paste(collapse = "|")
+
+ai_job_title_risk_filtered <- ai_job_risk %>%
+  filter(str_detect(str_to_lower(job_titles), pattern_job_title)) 
+
+```
+
+```{r}
+write.csv(meds_jobs_combined, "meds_jobs_combined.csv", row.names = FALSE)
+```
+

@@ -1,0 +1,70 @@
+keyword_pattern,regex_example,soc_code,soc_title,match_confidence,notes
+data scientist,\bdata scientist\b,15-2051,Data Scientists,High,Exact SOC match introduced in 2018
+data analyst,\bdata analyst\b,15-2031,Operations Research Analysts,High,Primary SOC for analysts working with data
+data analyst,\bdata analyst\b,15-2051,Data Scientists,Medium,Increasingly overlapping with data scientist roles
+data specialist,\bdata specialist\b,15-2051,Data Scientists,Medium,Generic title; context-dependent
+data specialist,\bdata specialist\b,15-2031,Operations Research Analysts,Medium,Depends on seniority and domain
+environmental analyst,\benvironmental analyst\b,19-2041,Environmental Scientists and Specialists Including Health,High,Primary match for env analysts
+environmental analyst,\benvironmental analyst\b,17-2081,Environmental Engineers,Medium,Engineering-focused environmental analysts
+environmental scientist,\benvironmental scientist\b,19-2041,Environmental Scientists and Specialists Including Health,High,Exact SOC match
+environmental specialist,\benvironmental specialist\b,19-2041,Environmental Scientists and Specialists Including Health,High,Primary match
+environmental specialist,\benvironmental specialist\b,17-3025,Environmental Engineering Technologists and Technicians,Medium,Technician-level roles
+environmental consultant,\benvironmental consultant\b,19-2041,Environmental Scientists and Specialists Including Health,High,Most consultants in env science map here
+environmental consultant,\benvironmental consultant\b,17-2081,Environmental Engineers,Medium,Engineering-track consultants
+environmental associate,\benvironmental associate\b,19-2041,Environmental Scientists and Specialists Including Health,Medium,Entry-level env science roles
+environmental associate,\benvironmental associate\b,19-4099,Life Physical and Social Science Technicians All Other,Medium,Technician/associate level env roles
+sustainability analyst,\bsustainability analyst\b,13-1199,Business Operations Specialists All Other,High,No exact SOC; closest match for corp sustainability
+sustainability analyst,\bsustainability analyst\b,19-2041,Environmental Scientists and Specialists Including Health,Medium,Science-focused sustainability roles
+machine learning specialist,\bmachine learning specialist\b,15-1221,Computer and Information Research Scientists,High,Primary SOC for ML research and development
+machine learning specialist,\bmachine learning specialist\b,15-2051,Data Scientists,High,Applied ML roles often classified here
+gis technician,\bgis technician\b,17-3031,Surveying and Mapping Technicians,High,Best match for technician-level GIS
+gis technician,\bgis technician\b,15-1299,Computer Occupations All Other,Medium,Some GIS roles classified under computer occupations
+geospatial analyst,\bgeospatial analyst\b,17-1021,Cartographers and Photogrammetrists,High,Higher-level geospatial and mapping roles
+geospatial analyst,\bgeospatial analyst\b,17-3031,Surveying and Mapping Technicians,High,Technician-level geospatial roles
+geospatial analyst,\bgeospatial analyst\b,15-1299,Computer Occupations All Other,Medium,GIS software/data-heavy roles
+spatial modeler,\bspatial modeler\b,17-1021,Cartographers and Photogrammetrists,High,Spatial modeling in mapping/GIS context
+spatial modeler,\bspatial modeler\b,15-2051,Data Scientists,Medium,Spatial modeling in data science context
+database manager,\bdatabase manager\b,15-1242,Database Administrators and Architects,High,Exact match
+database manager,\bdatabase manager\b,11-3021,Computer and Information Systems Managers,Medium,Senior or managerial DB roles
+programmer,\bprogrammer\b,15-1251,Computer Programmers,High,Exact SOC match
+climate data specialist,\bclimate data specialist\b,19-2021,Atmospheric and Space Scientists,High,Climate science and modeling roles
+climate data specialist,\bclimate data specialist\b,15-2051,Data Scientists,Medium,Data-intensive climate roles
+research analyst,\bresearch analyst\b,13-1161,Market Research Analysts and Marketing Specialists,High,General research analyst classification
+research analyst,\bresearch analyst\b,19-3099,Social Scientists and Related Workers All Other,Medium,Policy/social science research analysts
+research analyst,\bresearch analyst\b,19-2099,Physical Scientists All Other,Medium,Science-focused research analysts
+gis,\bgis\b,17-3031,Surveying and Mapping Technicians,High,GIS keyword catchall - technician level
+gis,\bgis\b,17-1021,Cartographers and Photogrammetrists,High,GIS keyword catchall - analyst/scientist level
+gis,\bgis\b,15-1299,Computer Occupations All Other,Medium,Software/IT-track GIS roles
+climate,\bclimate\b,19-2021,Atmospheric and Space Scientists,High,Atmospheric scientists and climatologists
+climate,\bclimate\b,19-2041,Environmental Scientists and Specialists Including Health,High,Environmental science focus with climate component
+water resource,\bwater resource\b,17-2051,Civil Engineers,High,Water resources engineering subdivision of civil
+water resource,\bwater resource\b,17-2081,Environmental Engineers,Medium,Env engineering water-focused roles
+water resource,\bwater resource\b,19-2041,Environmental Scientists and Specialists Including Health,Medium,Science-track water resource roles
+water,\bwater\b,17-2051,Civil Engineers,High,Water infrastructure and resource engineering
+water,\bwater\b,19-2041,Environmental Scientists and Specialists Including Health,Medium,Water quality and science roles
+water,\bwater\b,51-8031,Water and Wastewater Treatment Plant and System Operators,Low,Operational roles; unlikely for analyst-level searches
+conservation,\bconservation\b,19-1031,Conservation Scientists,High,Forest and rangeland conservation scientists
+conservation,\bconservation\b,45-4011,Forest and Conservation Workers,Medium,Field-level conservation roles
+conservation,\bconservation\b,19-4071,Forest and Conservation Technicians,Medium,Technician-level conservation roles
+environmental,\benvironmental\b,19-2041,Environmental Scientists and Specialists Including Health,High,Broad env keyword - primary classification
+environmental,\benvironmental\b,17-2081,Environmental Engineers,High,Engineering track env roles
+environmental,\benvironmental\b,17-3025,Environmental Engineering Technologists and Technicians,Medium,Technician-level env roles
+sustainability,\bsustainability\b,13-1199,Business Operations Specialists All Other,High,Corporate sustainability roles
+sustainability,\bsustainability\b,19-2041,Environmental Scientists and Specialists Including Health,Medium,Science-based sustainability roles
+sustainability,\bsustainability\b,11-9199,Managers All Other,Low,Sustainability manager roles; may not match analyst searches
+machine learning,\bmachine learning\b,15-1221,Computer and Information Research Scientists,High,ML research and development
+machine learning,\bmachine learning\b,15-2051,Data Scientists,High,Applied ML in data science context
+machine learning,\bmachine learning\b,15-1299,Computer Occupations All Other,Medium,ML engineering roles
+database,\bdatabase\b,15-1242,Database Administrators and Architects,High,DB administration and architecture
+database,\bdatabase\b,15-1251,Computer Programmers,Medium,Programmers working with databases
+spatial,\bspatial\b,17-1021,Cartographers and Photogrammetrists,High,Spatial analysis and mapping
+spatial,\bspatial\b,17-3031,Surveying and Mapping Technicians,High,Technician-level spatial roles
+geospatial,\bgeospatial\b,17-1021,Cartographers and Photogrammetrists,High,Geospatial analysis and mapping
+geospatial,\bgeospatial\b,17-3031,Surveying and Mapping Technicians,High,Technician-level geospatial roles
+geospatial,\bgeospatial\b,15-1299,Computer Occupations All Other,Medium,Software/IT-track geospatial roles
+researcher,\bresearcher\b,19-2099,Physical Scientists All Other,Medium,Physical/environmental science researchers
+researcher,\bresearcher\b,19-1099,Life Scientists All Other,Medium,Life/bio science researchers
+researcher,\bresearcher\b,15-1221,Computer and Information Research Scientists,Medium,Computing/AI researchers
+energy,\benergy\b,17-2199,Engineers All Other,High,Energy engineers including renewables
+energy,\benergy\b,13-2099,Financial Specialists All Other,Medium,Energy analysts/financial roles
+energy,\benergy\b,19-2099,Physical Scientists All Other,Medium,Energy science roles
